@@ -1,9 +1,12 @@
-import type { ChangeEvent } from "react";
+import { format } from "date-fns";
+import type { ChangeEvent, FC } from "react";
 import { useEffect, useState } from "react";
 import { useExchangeRate } from "../../hooks/useExchangeRate";
 import type { ExchangeRates } from "../../typings/ExchangeRates";
+import { CurrencyChart } from "../CurrencyChart/CurrencyChart";
+import { CurrencySelector } from "../CurrencySelector/CurrencySelector";
 
-const Converter = () => {
+const Converter: FC = () => {
   const [currencyList, getExchangeRatesForCurrencies] = useExchangeRate();
 
   const [fromValue, setFromValue] = useState("100");
@@ -14,27 +17,24 @@ const Converter = () => {
 
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>();
 
+  const todayDate = format(new Date(), "yyyy-MM-dd");
+
   useEffect(() => {
-    if (!fromValue || !exchangeRates || !toCurrency) {
+    setToValue(undefined);
+
+    if (!fromValue || !exchangeRates || !fromCurrency || !toCurrency) {
       return;
     }
 
-    const exchangeRate = exchangeRates?.["2022-11-03"]?.[toCurrency];
+    const exchangeRate = exchangeRates?.[todayDate]?.[toCurrency];
     if (!exchangeRate) {
       return;
     }
 
-    setToValue(
-      (parseFloat(fromValue) * exchangeRates["2022-11-03"][toCurrency]).toFixed(
-        2
-      )
-    );
-  }, [exchangeRates, fromValue, toCurrency]);
+    setToValue((parseFloat(fromValue) * exchangeRate).toFixed(2));
+  }, [exchangeRates, fromValue, fromCurrency, toCurrency, todayDate]);
 
   useEffect(() => {
-    setToValue(undefined);
-    console.log(`fromCurrency: ${fromCurrency}, toCurrency: ${toCurrency}`);
-
     if (!fromCurrency || !toCurrency) {
       return;
     }
@@ -73,42 +73,26 @@ const Converter = () => {
               </label>
             </div>
             <div className="w-1/3">
-              <label>
-                From
-                <select
-                  value={fromCurrency}
-                  onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                    setFromCurrency(event.target.value);
-                  }}
-                  className="w-full"
-                >
-                  <option value={undefined}>Please select</option>
-                  {currencyList.map(({ code, name }) => (
-                    <option key={code} value={code}>
-                      {code} - {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <CurrencySelector
+                label="From"
+                value={fromCurrency}
+                currencyList={currencyList}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  setFromCurrency(event.target.value);
+                }}
+                className="w-full"
+              />
             </div>
             <div className="w-1/3">
-              <label>
-                To
-                <select
-                  value={toCurrency}
-                  onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                    setToCurrency(event.target.value);
-                  }}
-                  className="w-full"
-                >
-                  <option value={undefined}>Please select</option>
-                  {currencyList.map(({ code, name }) => (
-                    <option key={code} value={code}>
-                      {code} - {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <CurrencySelector
+                label="To"
+                value={toCurrency}
+                currencyList={currencyList}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  setToCurrency(event.target.value);
+                }}
+                className="w-full"
+              />
             </div>
           </div>
           {fromValue && fromCurrency && toCurrency && (
@@ -118,6 +102,14 @@ const Converter = () => {
                 {toValue ?? <>Loading...</>} {toCurrency}
               </strong>
             </div>
+          )}
+          {exchangeRates && fromCurrency && toCurrency && (
+            <CurrencyChart
+              data={Object.entries(exchangeRates).map(([key, value]) => ({
+                date: key,
+                rate: value[toCurrency],
+              }))}
+            />
           )}
         </>
       )}
