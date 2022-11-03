@@ -1,3 +1,4 @@
+import { format, sub } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import type {
   CurrencyName,
@@ -9,7 +10,7 @@ import { useLocalStorage } from "./useLocalStorage";
 
 // We can move that constants to a separate file if they will be reused,
 // but I decided to leave them here for the simplicity
-const EXCHANGE_API_URL = "https://api.apilayer11.com/exchangerates_data/";
+const EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/";
 
 // Should be moved to the env variables or github secrets
 // and used on the BE side as it can be stolen and reused now
@@ -25,6 +26,19 @@ const useExchangeRate = () => {
   const [currencyList, setCurrencyList] = useState<Error | CurrencyName[]>();
   const [currencyListLocalStorage, setCurrencyListLocalStorage] =
     useLocalStorage("currency-list");
+  const [timeseriesLocalStorage, setTimeseriesLocalStorage] =
+    useLocalStorage("timeseries");
+  const [timeseries, setTimeseries] = useState<{
+    [timeseriesParameters: string]: ExchangeRates;
+  }>({});
+
+  useEffect(() => {
+    if (!timeseriesLocalStorage) {
+      return;
+    }
+
+    setTimeseries(JSON.parse(timeseriesLocalStorage));
+  }, [timeseriesLocalStorage]);
 
   useEffect(() => {
     const fetchCurrencies = async () => {
@@ -40,7 +54,7 @@ const useExchangeRate = () => {
 
         const symbolsJSON: SymbolsResponse = await symbolsResponse.json();
         if (!symbolsJSON.success) {
-          throw new Error();
+          throw new Error("API Error");
         }
 
         const currencyNames = Object.entries(symbolsJSON.symbols).map(
@@ -69,33 +83,55 @@ const useExchangeRate = () => {
       fromCurrencyCode: string,
       toCurrencyCode: string
     ): Promise<ExchangeRates> => {
-      try {
-        const timeseriesParameters = `start_date=2022-10-01&end_date=2022-11-03&base=${fromCurrencyCode}&symbols=${toCurrencyCode}`;
-        const ratesResponse = await fetch(
-          `${EXCHANGE_API_URL}timeseries?${timeseriesParameters}`,
-          requestOptions
-        );
+      const fromDate = format(sub(new Date(), { months: 1 }), "yyyy-MM-dd");
+      const todayDate = format(new Date(), "yyyy-MM-dd");
+      const timeseriesParameters = `start_date=${fromDate}&end_date=${todayDate}&base=${fromCurrencyCode}&symbols=${toCurrencyCode}`;
 
-        if (!ratesResponse.ok) {
-          throw new Error(ratesResponse.statusText);
+      const fetchExchangeRates = async () => {
+        try {
+          const ratesResponse = await fetch(
+            `${EXCHANGE_API_URL}timeseries?${timeseriesParameters}`,
+            requestOptions
+          );
+
+          if (!ratesResponse.ok) {
+            throw new Error(ratesResponse.statusText);
+          }
+
+          const ratesJSON: TimeSeriesResponse = await ratesResponse.json();
+
+          if (!ratesJSON.success) {
+            throw new Error("API Error");
+          }
+
+          return ratesJSON.rates;
+        } catch (error) {
+          // Better to automatically log to Sentry or similar solution
+          // eslint-disable-next-line no-console -- TODO: Add the proper errors handling
+          console.error(`Can't get exchange rates ${error}`);
+
+          return new Error();
         }
+      };
 
-        const ratesJSON: TimeSeriesResponse = await ratesResponse.json();
+      const exchangeRatesFromLocalStorage = timeseries[timeseriesParameters];
 
-        if (!ratesJSON.success) {
-          throw new Error();
-        }
-
-        return ratesJSON.rates;
-      } catch (error) {
-        // Better to automatically log to Sentry or similar solution
-        // eslint-disable-next-line no-console -- TODO: Add the proper errors handling
-        console.error(`Can't get exchange rates ${error}`);
-
-        return new Error();
+      if (exchangeRatesFromLocalStorage) {
+        return exchangeRatesFromLocalStorage;
       }
+
+      const exchangeRates = await fetchExchangeRates();
+
+      const newTimeseries = {
+        ...timeseries,
+        [timeseriesParameters]: exchangeRates,
+      };
+      setTimeseries(newTimeseries);
+      setTimeseriesLocalStorage(JSON.stringify(newTimeseries));
+
+      return exchangeRates;
     },
-    []
+    [setTimeseriesLocalStorage, timeseries]
   );
 
   return [currencyList, getExchangeRatesForCurrencies] as const;

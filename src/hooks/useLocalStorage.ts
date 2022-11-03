@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import { useCallback, useState } from "react";
 
 const useLocalStorage = (key: string) => {
