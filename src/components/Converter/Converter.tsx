@@ -39,7 +39,7 @@ const Converter: FC = () => {
       return;
     }
 
-    const exchangeRate = exchangeRates?.[todayDate]?.[toCurrency];
+    const exchangeRate = exchangeRates?.[todayDate];
     if (!exchangeRate) {
       return;
     }
@@ -168,7 +168,7 @@ const Converter: FC = () => {
                   <CurrencyChart
                     data={Object.entries(exchangeRates).map(([key, value]) => ({
                       date: key,
-                      rate: value[toCurrency],
+                      rate: value,
                     }))}
                     className="mt-5"
                   />

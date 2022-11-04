@@ -4,7 +4,7 @@ import type {
   CurrencyName,
   ExchangeRates,
   SymbolsResponse,
-  TimeSeriesResponse,
+  TimeseriesResponse,
 } from "../typings/ExchangeRates";
 import { useLocalStorage } from "./useLocalStorage";
 
@@ -22,6 +22,16 @@ const requestOptions = {
   headers: apiLayerFetchHeaders,
 };
 
+/**
+ * This hook loads the data from the exchange rates API.
+ * @example
+ * const [currencyList, getExchangeRatesForCurrencies] = useExchangeRate();
+ * console.log(currencyList);
+ * // [{code: "USD", name: "United States Dollar"}, {code: "EUR", name: "Euro"}]
+ * getExchangeRatesForCurrencies("USD", "EUR");
+ * // [{"2022-12-01": 1.2}, {"2022-12-02": 1.21, ...}]
+ * @returns [currencyList, getExchangeRatesForCurrencies] - the currency list and the function to get the exchange rates between two currencies for the last month
+ */
 const useExchangeRate = () => {
   const [currencyList, setCurrencyList] = useState<Error | CurrencyName[]>();
   const [currencyListLocalStorage, setCurrencyListLocalStorage] =
@@ -82,7 +92,7 @@ const useExchangeRate = () => {
     async (
       fromCurrencyCode: string,
       toCurrencyCode: string
-    ): Promise<ExchangeRates> => {
+    ): Promise<ExchangeRates | undefined> => {
       const fromDate = format(sub(new Date(), { months: 1 }), "yyyy-MM-dd");
       const todayDate = format(new Date(), "yyyy-MM-dd");
       const timeseriesParameters = `start_date=${fromDate}&end_date=${todayDate}&base=${fromCurrencyCode}&symbols=${toCurrencyCode}`;
@@ -98,13 +108,18 @@ const useExchangeRate = () => {
             throw new Error(ratesResponse.statusText);
           }
 
-          const ratesJSON: TimeSeriesResponse = await ratesResponse.json();
+          const ratesJSON: TimeseriesResponse = await ratesResponse.json();
 
           if (!ratesJSON.success) {
             throw new Error("API Error");
           }
 
-          return ratesJSON.rates;
+          const transformedRates: ExchangeRates = {};
+          Object.entries(ratesJSON.rates).forEach(([date, value]) => {
+            transformedRates[date] = value[toCurrencyCode];
+          });
+
+          return transformedRates;
         } catch (error) {
           // Better to automatically log to Sentry or similar solution
           // eslint-disable-next-line no-console -- TODO: Add the proper errors handling
@@ -121,6 +136,10 @@ const useExchangeRate = () => {
       }
 
       const exchangeRates = await fetchExchangeRates();
+
+      if (exchangeRates instanceof Error) {
+        return undefined;
+      }
 
       const newTimeseries = {
         ...timeseries,

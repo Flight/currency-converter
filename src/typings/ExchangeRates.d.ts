@@ -11,29 +11,32 @@ interface SymbolsResponse {
   success: boolean;
   symbols: SymbolsNames;
 }
-
-interface ExchangeRate {
+interface ExchangeRateResponse {
   [currencyCode: string]: number;
+}
+interface ExchangeRatesResponse {
+  [date: string]: ExchangeRateResponse;
 }
 
 interface ExchangeRates {
-  [date: string]: Rates;
+  [date: string]: number;
 }
 
-interface TimeSeriesResponse {
+interface TimeseriesResponse {
   success: boolean;
   timeseries: boolean;
   start_date: string;
   end_date: string;
   base: string;
-  rates: ExchangeRates;
+  rates: ExchangeRatesResponse;
 }
 
 export type {
   CurrencyName,
-  SymbolsResponse,
   SymbolsNames,
-  ExchangeRate,
+  SymbolsResponse,
+  ExchangeRateResponse,
+  ExchangeRatesResponse,
   ExchangeRates,
-  TimeSeriesResponse,
+  TimeseriesResponse,
 };
