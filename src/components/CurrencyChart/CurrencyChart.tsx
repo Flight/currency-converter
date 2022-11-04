@@ -17,10 +17,11 @@ interface ExchangeRate {
 
 interface CurrencyChartProps {
   data: ExchangeRate[];
+  className?: string;
 }
 
-const CurrencyChart: FC<CurrencyChartProps> = ({ data }) => (
-  <ResponsiveContainer width="100%" height={200}>
+const CurrencyChart: FC<CurrencyChartProps> = ({ data, className = "" }) => (
+  <ResponsiveContainer width="100%" height={200} className={className}>
     <LineChart data={data}>
       <CartesianGrid strokeDasharray="3" />
       <XAxis
@@ -45,7 +46,7 @@ const CurrencyChart: FC<CurrencyChartProps> = ({ data }) => (
         }
         formatter={(value: number) => [parseFloat(value.toFixed(2)), "Rate"]}
       />
-      <Line type="monotone" dataKey="rate" stroke="#8884d8" />
+      <Line type="monotone" dataKey="rate" stroke="#37cdbe" strokeWidth={3} />
     </LineChart>
   </ResponsiveContainer>
 );
