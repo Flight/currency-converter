@@ -1,10 +1,18 @@
 import type { FC } from "react";
 
 interface SpinnerProps {
-  title: string;
+  title?: string;
   className?: string;
 }
 
+/**
+ * Spinner component, typically used for the ajax data loading state.
+ * @example
+ * <Spinner title="Users list is loading" className="text-center" />
+ * @param title Optional title shown under the spinner
+ * @param className Optional class name of the spinner conatiner
+ * @returns React spinner component
+ */
 const Spinner: FC<SpinnerProps> = ({ title, className = "" }) => (
   <div role="status" className={className}>
     <svg
@@ -24,7 +32,7 @@ const Spinner: FC<SpinnerProps> = ({ title, className = "" }) => (
       />
     </svg>
     <span className="sr-only">Loading...</span>
-    <div className="mt-2 text-neutral text">{title}</div>
+    {title && <div className="mt-2 text-neutral text">{title}</div>}
   </div>
 );
 
