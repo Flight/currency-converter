@@ -49,7 +49,7 @@ const Converter: FC = () => {
   }, [fromCurrency, toCurrency, getExchangeRatesForCurrencies]);
 
   return currencyList === undefined ? (
-    <>Loading</>
+    <>Loading available currencies</>
   ) : (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
@@ -99,7 +99,7 @@ const Converter: FC = () => {
             <div>
               {fromValue} {fromCurrency} =<br />
               <strong className="text-lg">
-                {toValue ?? <>Loading...</>} {toCurrency}
+                {toValue ?? <>Loading exhcnage rates</>} {toCurrency}
               </strong>
             </div>
           )}

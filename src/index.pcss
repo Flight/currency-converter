@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Removing arrows from input[type="number"] */
+/*
+  Removing arrows from input[type="number"]
+  https://stackoverflow.com/a/74043438
+*/
 @layer base {
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button,
