@@ -24,6 +24,37 @@ interface CurrencyConverterProps {
   exchangeRatesByDate: ExchangeRatesByDate | undefined;
 }
 
+/**
+ * Currency converter dummy component
+ * @example
+ * <CurrencyConverter
+ *   currencyList={[{code: "USD", name: "United States Dollar"}, {code: "EUR", name: "Euro"}]}
+ *   fromValue={fromValue}
+ *   toValue={toValue}
+ *   setFromValue={setFromValue}
+ *   fromCurrency={fromCurrency}
+ *   setFromCurrency={setFromCurrency}
+ *   toCurrency={toCurrency}
+ *   setToCurrency={setToCurrency}
+ *   swapCurrencies={swapCurrencies}
+ *   exchangeRatesByDate={[{"2022-12-01": 1.2}, {"2022-12-02": 1.21}]}
+ * />
+ * @param currencyList List of available currencies
+
+ * @param fromValue String amount of the currency to convert from
+ * @param toValue String amount of the currency to convert to
+ * @param setFromValue Setter of the amount of the currency to convert from
+
+ * @param fromCurrency String code of the currency to convert from
+ * @param setFromCurrency Setter of the code of the currency to convert from
+ * @param toCurrency String code of the currency to convert to
+ * @param setToCurrency Setter of the code of the currency to convert to
+
+ * @param swapCurrencies Function to swap the currencies
+
+ * @param exchangeRatesByDate Array of objects of exchange rates by date
+ * @returns React component
+ */
 const CurrencyConverter: FC<CurrencyConverterProps> = ({
   currencyList,
 
@@ -45,7 +76,7 @@ const CurrencyConverter: FC<CurrencyConverterProps> = ({
       {currencyList === undefined ? (
         <Spinner title="Loading available currencies" className="text-center" />
       ) : (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
+        // eslint-disable-next-line react/jsx-no-useless-fragment -- Prevents nesting ternary operators
         <>
           {currencyList instanceof Error ? (
             <p className="text-neutral text-center">

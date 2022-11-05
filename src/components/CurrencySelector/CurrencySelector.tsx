@@ -10,6 +10,24 @@ interface CurrencySelectorProps {
   className?: string;
 }
 
+/**
+ * Currency selector component
+ * @example
+ * <CurrencySelector
+ *   id="currency"
+ *   label="Please select the currency"
+ *   value={selectedCurrency}
+ *   currencyList={currencyList}
+ *   onChange={(event) => console.log(event.target.value)}
+ *   className="w-1/2" />
+ * @param id Select id
+ * @param label Select label
+ * @param currencyList Array of currency names and codes
+ * @param value Selected option value
+ * @param onChange On select change event handler
+ * @param className Optional class name
+ * @returns React component
+ */
 const CurrencySelector: FC<CurrencySelectorProps> = ({
   id,
   label,

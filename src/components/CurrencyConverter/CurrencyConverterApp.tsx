@@ -5,6 +5,12 @@ import { useExchangeRate } from "../../hooks/useExchangeRate";
 import type { ExchangeRatesByDate } from "../../typings/ExchangeRatesByDate";
 import { CurrencyConverter } from "./CurrencyConverter";
 
+/**
+ * Currency converter app.
+ * Get's the currencies list and the exchange rates for the selected ones,
+ * then passing it to the <CurrencyConverter /> component and handles the business logic.
+ * @returns React component
+ */
 const CurrencyConverterApp: FC = () => {
   const [currencyList, getExchangeRatesForCurrencies] = useExchangeRate();
 
