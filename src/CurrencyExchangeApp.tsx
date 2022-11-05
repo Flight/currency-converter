@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { CurrencyConverter } from "./components/CurrencyConverter/CurrencyConverter";
+import { CurrencyConverterApp } from "./components/CurrencyConverter/CurrencyConverterApp";
 
 /**
  * Currency Exchange App Component
@@ -11,7 +11,7 @@ const CurrencyExchangeApp: FC = () => (
     <h1 className="text-3xl font-bold pb-5 text-center text-neutral">
       Currency exchange
     </h1>
-    <CurrencyConverter />
+    <CurrencyConverterApp />
   </div>
 );
 

@@ -11,7 +11,7 @@ interface SpinnerProps {
  * <Spinner title="Users list is loading" className="text-center" />
  * @param title Optional title shown under the spinner
  * @param className Optional class name of the spinner conatiner
- * @returns React spinner component
+ * @returns React component
  */
 const Spinner: FC<SpinnerProps> = ({ title, className = "" }) => (
   <div role="status" className={className}>
@@ -37,3 +37,4 @@ const Spinner: FC<SpinnerProps> = ({ title, className = "" }) => (
 );
 
 export { Spinner };
+export type { SpinnerProps };

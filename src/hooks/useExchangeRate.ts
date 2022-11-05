@@ -23,14 +23,14 @@ const requestOptions = {
 };
 
 /**
- * This hook loads the data from the exchange rates API.
+ * This hook loads the data from the exchange rates API https://exchangeratesapi.io/ .
  * @example
  * const [currencyList, getExchangeRatesForCurrencies] = useExchangeRate();
  * console.log(currencyList);
  * // [{code: "USD", name: "United States Dollar"}, {code: "EUR", name: "Euro"}]
  * getExchangeRatesForCurrencies("USD", "EUR");
  * // [{"2022-12-01": 1.2}, {"2022-12-02": 1.21, ...}]
- * @returns [currencyList, getExchangeRatesForCurrencies] - the currency list and the function to get the exchange rates between two currencies for the last month
+ * @returns [currencyList, getExchangeRatesForCurrencies] - the currency list {CurrencyName[]} and the function to get the exchange rates between two currencies for the last month
  */
 const useExchangeRate = () => {
   const [currencyList, setCurrencyList] = useState<Error | CurrencyName[]>();

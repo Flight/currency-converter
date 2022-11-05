@@ -39,3 +39,4 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({
 );
 
 export { CurrencySelector };
+export type { CurrencySelectorProps };
