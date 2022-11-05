@@ -2,13 +2,13 @@ import { format } from "date-fns";
 import type { ChangeEvent, FC } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useExchangeRate } from "../../hooks/useExchangeRate";
-import type { ExchangeRates } from "../../typings/ExchangeRates";
+import type { ExchangeRatesByDate } from "../../typings/ExchangeRatesByDate";
 import { CurrencyChart } from "../CurrencyChart/CurrencyChart";
 import { CurrencySelector } from "../CurrencySelector/CurrencySelector";
-import { ReactComponent as IconSwap } from "../../svg/swap.svg";
 import { Spinner } from "../Spinner/Spinner";
+import { ReactComponent as IconSwap } from "../../svg/swap.svg";
 
-const Converter: FC = () => {
+const CurrencyConverter: FC = () => {
   const [currencyList, getExchangeRatesForCurrencies] = useExchangeRate();
 
   const [fromValue, setFromValue] = useState("100");
@@ -17,7 +17,8 @@ const Converter: FC = () => {
   const [fromCurrency, setFromCurrency] = useState<string>();
   const [toCurrency, setToCurrency] = useState<string>();
 
-  const [exchangeRates, setExchangeRates] = useState<ExchangeRates>();
+  const [exchangeRatesByDate, setExchangeRatesByDate] =
+    useState<ExchangeRatesByDate>();
 
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
@@ -35,11 +36,11 @@ const Converter: FC = () => {
   useEffect(() => {
     setToValue(undefined);
 
-    if (!fromValue || !exchangeRates || !fromCurrency || !toCurrency) {
+    if (!fromValue || !exchangeRatesByDate || !fromCurrency || !toCurrency) {
       return;
     }
 
-    const exchangeRate = exchangeRates?.[todayDate];
+    const exchangeRate = exchangeRatesByDate?.[todayDate];
     if (!exchangeRate) {
       return;
     }
@@ -47,17 +48,17 @@ const Converter: FC = () => {
     setToValue(
       (parseFloat(parseFloat(fromValue).toFixed(2)) * exchangeRate).toString()
     );
-  }, [exchangeRates, fromValue, fromCurrency, toCurrency, todayDate]);
+  }, [exchangeRatesByDate, fromValue, fromCurrency, toCurrency, todayDate]);
 
   useEffect(() => {
-    setExchangeRates(undefined);
+    setExchangeRatesByDate(undefined);
 
     if (!fromCurrency || !toCurrency) {
       return;
     }
 
     const getRates = async () => {
-      setExchangeRates(
+      setExchangeRatesByDate(
         await getExchangeRatesForCurrencies(fromCurrency, toCurrency)
       );
     };
@@ -164,12 +165,14 @@ const Converter: FC = () => {
                     )}
                   </div>
                 )}
-                {exchangeRates && fromCurrency && toCurrency && (
+                {exchangeRatesByDate && fromCurrency && toCurrency && (
                   <CurrencyChart
-                    data={Object.entries(exchangeRates).map(([key, value]) => ({
-                      date: key,
-                      rate: value,
-                    }))}
+                    data={Object.entries(exchangeRatesByDate).map(
+                      ([key, value]) => ({
+                        date: key,
+                        rate: value,
+                      })
+                    )}
                     className="mt-5"
                   />
                 )}
@@ -182,4 +185,4 @@ const Converter: FC = () => {
   );
 };
 
-export { Converter };
+export { CurrencyConverter };

@@ -1,5 +1,5 @@
 import type { ChangeEvent, FC } from "react";
-import type { CurrencyName } from "../../typings/ExchangeRates";
+import type { CurrencyName } from "../../typings/CurrencyName";
 
 interface CurrencySelectorProps {
   id: string;

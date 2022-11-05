@@ -1,11 +1,11 @@
 import { format, sub } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
+import type { CurrencyName } from "../typings/CurrencyName";
 import type {
-  CurrencyName,
-  ExchangeRates,
   SymbolsResponse,
   TimeseriesResponse,
-} from "../typings/ExchangeRates";
+} from "../typings/ExchangeRatesAPI";
+import type { ExchangeRatesByDate } from "../typings/ExchangeRatesByDate";
 import { useLocalStorage } from "./useLocalStorage";
 
 // We can move that constants to a separate file if they will be reused,
@@ -39,7 +39,7 @@ const useExchangeRate = () => {
   const [timeseriesLocalStorage, setTimeseriesLocalStorage] =
     useLocalStorage("timeseries");
   const [timeseries, setTimeseries] = useState<{
-    [timeseriesParameters: string]: ExchangeRates;
+    [timeseriesParameters: string]: ExchangeRatesByDate;
   }>({});
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const useExchangeRate = () => {
     async (
       fromCurrencyCode: string,
       toCurrencyCode: string
-    ): Promise<ExchangeRates | undefined> => {
+    ): Promise<ExchangeRatesByDate | undefined> => {
       const fromDate = format(sub(new Date(), { months: 1 }), "yyyy-MM-dd");
       const todayDate = format(new Date(), "yyyy-MM-dd");
       const timeseriesParameters = `start_date=${fromDate}&end_date=${todayDate}&base=${fromCurrencyCode}&symbols=${toCurrencyCode}`;
@@ -114,7 +114,7 @@ const useExchangeRate = () => {
             throw new Error("API Error");
           }
 
-          const transformedRates: ExchangeRates = {};
+          const transformedRates: ExchangeRatesByDate = {};
           Object.entries(ratesJSON.rates).forEach(([date, value]) => {
             transformedRates[date] = value[toCurrencyCode];
           });

@@ -1,25 +1,19 @@
-interface CurrencyName {
-  code: string;
-  name: string;
-}
+// Typings for https://exchangeratesapi.io/ API responses
 
-interface SymbolsNames {
+interface SymbolsNamesResponse {
   [currencyCode: string]: string;
 }
 
 interface SymbolsResponse {
   success: boolean;
-  symbols: SymbolsNames;
+  symbols: SymbolsNamesResponse;
 }
+
 interface ExchangeRateResponse {
   [currencyCode: string]: number;
 }
 interface ExchangeRatesResponse {
   [date: string]: ExchangeRateResponse;
-}
-
-interface ExchangeRates {
-  [date: string]: number;
 }
 
 interface TimeseriesResponse {
@@ -31,12 +25,4 @@ interface TimeseriesResponse {
   rates: ExchangeRatesResponse;
 }
 
-export type {
-  CurrencyName,
-  SymbolsNames,
-  SymbolsResponse,
-  ExchangeRateResponse,
-  ExchangeRatesResponse,
-  ExchangeRates,
-  TimeseriesResponse,
-};
+export type { SymbolsResponse, TimeseriesResponse };
