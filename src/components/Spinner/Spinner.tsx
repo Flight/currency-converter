@@ -31,8 +31,11 @@ const Spinner: FC<SpinnerProps> = ({ title, className = "" }) => (
         fill="currentFill"
       />
     </svg>
-    <span className="sr-only">Loading...</span>
-    {title && <div className="mt-2 text-neutral text">{title}</div>}
+    {title ? (
+      <div className="mt-2 text-neutral text">{title}</div>
+    ) : (
+      <span className="sr-only">Loading...</span>
+    )}
   </div>
 );
 

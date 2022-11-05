@@ -37,7 +37,7 @@ interface CurrencyConverterProps {
  *   toCurrency={toCurrency}
  *   setToCurrency={setToCurrency}
  *   swapCurrencies={swapCurrencies}
- *   exchangeRatesByDate={[{"2022-12-01": 1.2}, {"2022-12-02": 1.21}]}
+ *   exchangeRatesByDate={{"2022-12-01": 1.2, "2022-12-02": 1.21, ...}}
  * />
  * @param currencyList List of available currencies
 
@@ -93,6 +93,7 @@ const CurrencyConverter: FC<CurrencyConverterProps> = ({
                     <input
                       value={fromValue}
                       id="fromValue"
+                      data-testid="fromValue"
                       className="appearance-none input input-bordered"
                       type="number"
                       onChange={(event) => setFromValue(event.target.value)}
@@ -139,7 +140,10 @@ const CurrencyConverter: FC<CurrencyConverterProps> = ({
                 </div>
               </div>
               {fromValue && fromCurrency && toCurrency && (
-                <div className="mt-5 text-center">
+                <div
+                  className="mt-5 text-center"
+                  data-testid="conversion-result"
+                >
                   <strong>{parseFloat(fromValue).toFixed(2)}</strong>{" "}
                   {getCurrencyNameFromCode(fromCurrency, currencyList)} =
                   <br />

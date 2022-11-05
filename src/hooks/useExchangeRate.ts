@@ -13,7 +13,7 @@ import { useLocalStorage } from "./useLocalStorage";
 const EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/";
 
 // Should be moved to the env variables or github secrets
-// and used on the BE side as it can be stolen and reused now
+// and used on the BE side as it can be intercepted and reused by ill-wishers
 const API_KEY = "ITmx6qHDk4jyEMePtBkTLLsGdq1dLgxm";
 
 const apiLayerFetchHeaders = new Headers();
@@ -29,7 +29,7 @@ const requestOptions = {
  * console.log(currencyList);
  * // [{code: "USD", name: "United States Dollar"}, {code: "EUR", name: "Euro"}]
  * getExchangeRatesForCurrencies("USD", "EUR");
- * // [{"2022-12-01": 1.2}, {"2022-12-02": 1.21, ...}]
+ * // {"2022-12-01": 1.2, "2022-12-02": 1.21, ...}
  * @returns [currencyList, getExchangeRatesForCurrencies] - the currency list {CurrencyName[]} and the function to get the exchange rates between two currencies for the last month
  */
 const useExchangeRate = () => {

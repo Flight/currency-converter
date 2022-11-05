@@ -1,16 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import { CurrencyExchangeApp } from "./CurrencyExchangeApp";
 
-const mockConverter = vi.fn();
-vi.mock("./components/CurrencyConverter/CurrencyConverter", () => ({
-  CurrencyConverter: () => mockConverter(),
+const mockCurrencyConverterApp = vi.fn();
+vi.mock("./components/CurrencyConverter/CurrencyConverterApp", () => ({
+  CurrencyConverterApp: () => mockCurrencyConverterApp(),
 }));
 
 render(<CurrencyExchangeApp />);
 
-test("Currency Exchange App loads and fires events", async () => {
+test("Currency Exchange App loads and fires events", () => {
   expect(
     screen.getByRole("heading", { name: "Currency exchange" })
   ).toBeInTheDocument();
-  expect(mockConverter).toHaveBeenCalledTimes(1);
+  expect(mockCurrencyConverterApp).toHaveBeenCalledTimes(1);
 });
