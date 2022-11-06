@@ -4,11 +4,13 @@
   "extends": "./tsconfig.json",
   "include": [
     "src",
+    "cypress",
 
     // these are the eslint-only inclusions
     ".eslintrc.cjs",
     "tailwind.config.cjs",
     "postcss.config.cjs",
-    "vite.config.ts"
+    "vite.config.ts",
+    "cypress.config.ts"
   ]
 }

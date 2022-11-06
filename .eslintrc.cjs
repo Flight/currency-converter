@@ -118,11 +118,16 @@ module.exports = {
     "public/**/*",
     "dist/**/*",
     "coverage/**/*",
+    "cypress/**/*",
     ".eslintrc.cjs",
   ],
   overrides: [
     {
-      files: ["src/stories/**/*.stories.tsx", "vite.config.ts"],
+      files: [
+        "src/stories/**/*.stories.tsx",
+        "vite.config.ts",
+        "cypress.config.ts",
+      ],
       rules: {
         "import/no-default-export": "off",
         "react/jsx-props-no-spreading": "off",
