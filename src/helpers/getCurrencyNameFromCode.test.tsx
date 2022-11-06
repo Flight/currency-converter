@@ -10,5 +10,7 @@ test("Gets the currency name from code", () => {
   expect(getCurrencyNameFromCode("USD", sampleCurrencyList)).toBe(
     "United States Dollar"
   );
-  expect(getCurrencyNameFromCode("ASD", sampleCurrencyList)).toBe(undefined);
+  expect(getCurrencyNameFromCode("ASD", sampleCurrencyList)).toBeUndefined();
+  expect(getCurrencyNameFromCode("ASD", undefined)).toBeUndefined();
+  expect(getCurrencyNameFromCode("ASD", new Error())).toBeUndefined();
 });

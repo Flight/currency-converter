@@ -9,7 +9,7 @@ import type { CurrencyName } from "../typings/CurrencyName";
  */
 const getCurrencyNameFromCode = (
   code: string,
-  currencyList: CurrencyName[]
+  currencyList: CurrencyName[] | undefined | Error
 ): string | undefined => {
   if (!currencyList || currencyList instanceof Error) {
     return undefined;
