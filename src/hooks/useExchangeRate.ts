@@ -11,13 +11,11 @@ import { useLocalStorage } from "./useLocalStorage";
 // We can move that constants to a separate file if they will be reused,
 // but I decided to leave them here for the simplicity
 const EXCHANGE_API_URL = "https://api.apilayer.com/exchangerates_data/";
-
-// Should be moved to the env variables or github secrets
-// and used on the BE side as it can be intercepted and reused by ill-wishers
-const API_KEY = "ITmx6qHDk4jyEMePtBkTLLsGdq1dLgxm";
+// Should be used on the BE side as it can be intercepted and reused by ill-wishers
+const { VITE_API_KEY } = import.meta.env;
 
 const apiLayerFetchHeaders = new Headers();
-apiLayerFetchHeaders.append("apikey", API_KEY);
+apiLayerFetchHeaders.append("apikey", VITE_API_KEY);
 const requestOptions = {
   headers: apiLayerFetchHeaders,
 };
