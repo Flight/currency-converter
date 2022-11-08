@@ -14,6 +14,7 @@ module.exports = {
     "plugin:eslint-comments/recommended",
     "plugin:promise/recommended",
     "prettier",
+    "plugin:storybook/recommended",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
