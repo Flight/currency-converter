@@ -14,7 +14,8 @@
     "pre-commit": "tsc && eslint --config .eslintrc.cjs --max-warnings=0 && prettier ./src --write && pnpm coverage",
     "prepare": "husky install",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o ./dist/storybook"
+    "build-storybook": "storybook build -o ./storybook",
+    "preview-storybook": "vite preview --outDir ./storybook"
   },
   "dependencies": {
     "daisyui": "^2.38.0",
