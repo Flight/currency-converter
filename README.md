@@ -1,5 +1,8 @@
 # Currency Converter
 
+Live url:
+[https://flight.github.io/currency-converter/](https://flight.github.io/currency-converter/)
+
 [React](https://reactjs.org) + [Typescript](https://www.typescriptlang.org) + [Tailwind CSS](https://tailwindcss.com) + [daisyUI](https://daisyui.com) + [Recharts](https://recharts.org) + [Storybook](http://storybook.js.org) + [Vite](https://vitejs.dev) + [ESLint](https://eslint.org) + [Prettier](https://prettier.io) + [Husky](https://github.com/typicode/husky) + [Vitest](https://vitest.dev) + [jest-dom (React Testing Library)](https://github.com/testing-library/jest-dom) + [c8](https://github.com/bcoe/c8) + [Cypress](https://www.cypress.io)
 
 ![Currency Converter](screenshots/app.png?raw=true)
